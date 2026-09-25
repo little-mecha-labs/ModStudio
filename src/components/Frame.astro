@@ -14,10 +14,9 @@ interface Props {
   band?: boolean;
   focus?: string;
   zoom?: boolean;
-  eager?: boolean;
 }
 
-const { src, alt, sizes, depth, class: className, band = false, focus, zoom = true, eager = false } = Astro.props;
+const { src, alt, sizes, depth, class: className, band = false, focus, zoom = true } = Astro.props;
 const full = zoom ? await getImage({ src, width: 2000, format: 'webp' }) : null;
 ---
 
@@ -34,7 +33,7 @@ const full = zoom ? await getImage({ src, width: 2000, format: 'webp' }) : null;
       sizes={sizes}
       class="frame__img"
       data-inner
-      loading={eager ? 'eager' : 'lazy'}
+      loading="eager"
       style={focus ? `object-position: 50% ${focus}` : undefined}
     />
   </div>

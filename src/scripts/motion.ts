@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { onReady } from './ready';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,14 +19,19 @@ if (lenis) {
 const all = <T extends Element = HTMLElement>(selector: string) => gsap.utils.toArray<T>(selector);
 
 if (!reduceMotion) {
-  // Hero: image settles in on load, then sinks slower than the page while
-  // the title lifts away.
+  // Hero: image settles in as the loading screen lifts, then sinks slower
+  // than the page while the title lifts away.
   const hero = document.querySelector<HTMLElement>('[data-hero]');
   if (hero) {
     const media = hero.querySelector('[data-hero-media]');
     const content = hero.querySelector('[data-hero-content]');
-    gsap.from(media, { scale: 1.15, duration: 2.4, ease: 'power3.out' });
-    gsap.from(content?.children ?? [], { y: 40, opacity: 0, duration: 1.4, ease: 'power3.out', stagger: 0.12, delay: 0.3 });
+    const lines = content?.children ?? [];
+    gsap.set(media, { scale: 1.15 });
+    gsap.set(lines, { y: 40, opacity: 0 });
+    onReady(() => {
+      gsap.to(media, { scale: 1, duration: 2.4, ease: 'power3.out' });
+      gsap.to(lines, { y: 0, opacity: 1, duration: 1.4, ease: 'power3.out', stagger: 0.12, delay: 0.5 });
+    });
     gsap.to(hero.querySelector('.hero__img'), {
       yPercent: 22,
       ease: 'none',
@@ -118,6 +124,6 @@ if (!reduceMotion) {
     );
   }
 
-  // Positions change once images and fonts load.
-  window.addEventListener('load', () => ScrollTrigger.refresh());
+  // Positions settle once images and fonts have loaded.
+  onReady(() => ScrollTrigger.refresh());
 }

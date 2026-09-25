@@ -678,3 +678,54 @@ figure {
     height: 100%;
   }
 }
+
+/* ---------- Loading screen ---------- */
+
+/* Only shown when JavaScript runs, so the site still works without it. */
+.loader {
+  display: none;
+}
+.js .loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--light);
+}
+.js:not(.is-ready),
+.js:not(.is-ready) body {
+  overflow: hidden;
+}
+.loader__inner {
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+}
+.loader__name {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
+  line-height: 1;
+}
+.loader__bar {
+  width: min(260px, 56vw);
+  height: 1px;
+  background: rgb(248 245 240 / 0.18);
+  overflow: hidden;
+}
+.loader__bar span {
+  display: block;
+  height: 100%;
+  background: var(--light);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.loader__count {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  font-variant-numeric: tabular-nums;
+  color: rgb(248 245 240 / 0.7);
+}
