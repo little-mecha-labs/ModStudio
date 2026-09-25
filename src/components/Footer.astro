@@ -1,0 +1,13 @@
+---
+import { site } from '../data/site';
+---
+
+<footer class="footer" id="contact">
+  <p class="eyebrow" data-fade>Contact</p>
+  <h2 class="footer__title" data-fade>Let’s talk about<br /><em>your space.</em></h2>
+  <div class="footer__links" data-fade>
+    <a href={`mailto:${site.email}`}>{site.email}</a>
+    <a href={site.instagram} target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <p class="footer__legal">© {new Date().getFullYear()} {site.name}</p>
+</footer>

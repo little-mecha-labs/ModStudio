@@ -1,0 +1,13 @@
+---
+import { site } from '../data/site';
+import { url } from '../lib/url';
+---
+
+<header class="nav" data-nav>
+  <a class="nav__logo" href={url()}>{site.name}</a>
+  <nav class="nav__links" aria-label="Main">
+    <a href={url('#work')}>Work</a>
+    <a href={url('#studio')}>Studio</a>
+    <a href={url('#contact')}>Contact</a>
+  </nav>
+</header>

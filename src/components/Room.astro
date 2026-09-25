@@ -1,0 +1,62 @@
+---
+import Frame from './Frame.astro';
+import { image } from '../lib/images';
+import type { Room } from '../data/projects';
+
+interface Props {
+  room: Room;
+  index: number;
+  code: string;
+  projectTitle: string;
+}
+
+const { room, index, code, projectTitle } = Astro.props;
+const num = String(index + 1).padStart(2, '0');
+const alt = (n: number) => `${projectTitle} — ${room.name}, view ${n}`;
+let view = 0;
+---
+
+<section class="room">
+  <header class="room__head">
+    <span class="room__num" data-fade>{num}</span>
+    <h2 class="room__title" data-depth="-0.05">{room.name}</h2>
+  </header>
+
+  {
+    room.rows.map((row, i) => {
+      const flip = (index + i) % 2 === 1;
+      if (row.type === 'pair') {
+        return (
+          <div class:list={['row row--pair', { 'is-flip': flip }]}>
+            <Frame
+              src={image(code, row.images[0])}
+              alt={alt(++view)}
+              sizes="(min-width: 900px) 40vw, 80vw"
+              class="row__main"
+              depth={-0.04}
+            />
+            <Frame
+              src={image(code, row.images[1])}
+              alt={alt(++view)}
+              sizes="(min-width: 900px) 30vw, 62vw"
+              class="row__side"
+              depth={0.14}
+            />
+          </div>
+        );
+      }
+      if (row.type === 'single') {
+        return (
+          <div class:list={['row row--single', { 'is-flip': flip }]}>
+            <Frame src={image(code, row.image)} alt={alt(++view)} sizes="(min-width: 900px) 48vw, 86vw" depth={0.05} />
+          </div>
+        );
+      }
+      return (
+        <div class="row row--band">
+          <Frame src={image(code, row.image)} alt={alt(++view)} sizes="100vw" band focus={row.focus} />
+        </div>
+      );
+    })
+  }
+</section>

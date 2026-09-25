@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Room from '../../components/Room.astro';
+import { Image } from 'astro:assets';
+import { projects, type Project } from '../../data/projects';
+import { image } from '../../lib/images';
+import { url } from '../../lib/url';
+
+export function getStaticPaths() {
+  return projects.map((project, i) => ({
+    params: { slug: project.slug },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+interface Props {
+  project: Project;
+  next: Project;
+}
+
+const { project, next } = Astro.props;
+const number = String(projects.indexOf(project) + 1).padStart(2, '0');
+---
+
+<Base title={project.title} description={project.summary} accent={project.accent}>
+  <Hero src={image(project.code, project.hero)} alt={`${project.title} — main view`} focus={project.heroFocus}>
+    <p class="eyebrow eyebrow--light">Project {number} · {project.subtitle}</p>
+    <h1 class="hero__title">{project.title}</h1>
+  </Hero>
+
+  <section class="intro">
+    <dl class="intro__meta" data-fade>
+      <div><dt>Location</dt><dd>{project.location}</dd></div>
+      <div><dt>Year</dt><dd>{project.year}</dd></div>
+      <div><dt>Scope</dt><dd>{project.scope}</dd></div>
+    </dl>
+    <p class="intro__text" data-fade>{project.summary}</p>
+  </section>
+
+  {project.rooms.map((room, i) => <Room room={room} index={i} code={project.code} projectTitle={project.title} />)}
+
+  <a class="next" href={url(`projects/${next.slug}/`)} data-next style={`--next-accent: ${next.accent}`}>
+    <div class="next__sticky">
+      <div class="next__media" data-next-media>
+        <Image
+          src={image(next.code, next.hero)}
+          alt=""
+          widths={[800, 1200, 1600, 2000]}
+          sizes="100vw"
+          class="next__img"
+          style={`object-position: 50% ${next.heroFocus}`}
+        />
+      </div>
+      <div class="next__content">
+        <p class="eyebrow eyebrow--light">Next project</p>
+        <p class="next__title">{next.title}</p>
+        <span class="next__cta">View project →</span>
+      </div>
+    </div>
+  </a>
+</Base>

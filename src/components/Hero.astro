@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  focus?: string;
+}
+
+const { src, alt, focus = '50%' } = Astro.props;
+---
+
+<section class="hero" data-hero>
+  <div class="hero__media" data-hero-media>
+    <Image
+      src={src}
+      alt={alt}
+      widths={[800, 1200, 1600, 2000]}
+      sizes="100vw"
+      class="hero__img"
+      loading="eager"
+      fetchpriority="high"
+      style={`object-position: 50% ${focus}`}
+    />
+  </div>
+  <div class="hero__shade"></div>
+  <div class="hero__content" data-hero-content>
+    <slot />
+  </div>
+  <div class="hero__cue" aria-hidden="true"><span>Scroll</span></div>
+</section>
